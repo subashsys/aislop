@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" role="img" aria-label="MineMemoSlop banner">
+  <defs>
+    <linearGradient id="bannerGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="55%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="bannerSheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="bannerDots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="2" fill="#ffffff" fill-opacity="0.16"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="400" fill="url(#bannerGradient)"/>
+  <rect width="1600" height="400" fill="url(#bannerDots)"/>
+
+  <circle cx="1380" cy="70" r="200" fill="#ffffff" fill-opacity="0.12"/>
+  <circle cx="1510" cy="330" r="140" fill="#ffffff" fill-opacity="0.10"/>
+  <circle cx="140" cy="340" r="180" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="250" cy="60" r="120" fill="#ffffff" fill-opacity="0.07"/>
+
+  <rect width="1600" height="220" fill="url(#bannerSheen)"/>
+
+  <!-- Stylised calendar card -->
+  <g transform="translate(800 200)">
+    <rect x="-122" y="-142" width="20" height="54" rx="10" fill="#ffffff" fill-opacity="0.9"/>
+    <rect x="102" y="-142" width="20" height="54" rx="10" fill="#ffffff" fill-opacity="0.9"/>
+    <rect x="-170" y="-110" width="340" height="220" rx="28" fill="#ffffff" fill-opacity="0.18" stroke="#ffffff" stroke-opacity="0.55" stroke-width="4"/>
+    <path d="M-170 -82 a28 28 0 0 1 28 -28 h284 a28 28 0 0 1 28 28 v26 h-340 z" fill="#ffffff" fill-opacity="0.32"/>
+
+    <g fill="#ffffff" fill-opacity="0.35">
+      <rect x="-126" y="-48" width="48" height="40" rx="10"/>
+      <rect x="-58" y="-48" width="48" height="40" rx="10"/>
+      <rect x="10" y="-48" width="48" height="40" rx="10"/>
+      <rect x="78" y="-48" width="48" height="40" rx="10"/>
+      <rect x="-126" y="8" width="48" height="40" rx="10"/>
+      <rect x="-58" y="8" width="48" height="40" rx="10"/>
+      <rect x="78" y="8" width="48" height="40" rx="10"/>
+      <rect x="-126" y="64" width="48" height="40" rx="10"/>
+      <rect x="-58" y="64" width="48" height="40" rx="10"/>
+      <rect x="10" y="64" width="48" height="40" rx="10"/>
+      <rect x="78" y="64" width="48" height="40" rx="10"/>
+    </g>
+
+    <!-- Highlighted "today" cell -->
+    <rect x="10" y="8" width="48" height="40" rx="10" fill="#ffffff" fill-opacity="0.95"/>
+    <circle cx="34" cy="44" r="6" fill="#059669"/>
+  </g>
+</svg>
