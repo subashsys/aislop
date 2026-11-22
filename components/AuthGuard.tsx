@@ -38,7 +38,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         className="flex min-h-screen items-center justify-center px-4"
         role="status"
       >
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading…</p>
+        <p className="text-sm text-ink-muted">Loading…</p>
       </div>
     );
   }

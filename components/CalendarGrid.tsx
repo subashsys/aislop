@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Button from "@/components/ui/Button";
 import {
   buildMonthCells,
   formatFullDate,
@@ -8,7 +9,6 @@ import {
   type MonthCell,
   type ViewMonth,
 } from "@/lib/date";
-import { cardSurface, focusRing, iconButton, secondaryButton } from "@/lib/ui";
 
 interface CalendarGridProps {
   view: ViewMonth;
@@ -41,8 +41,10 @@ function chunkIntoWeeks(cells: MonthCell[]): MonthCell[][] {
 }
 
 /**
- * Sun-Sat month grid with prev/next/today controls. Dates that carry items
- * show a count badge; clicking any date opens that day's dialog.
+ * Sun-Sat month grid with prev/today/next controls in a header row.
+ * Cells are divided by 1px lines inside a single outer border; days that
+ * carry items show an accent indicator, clicking any date opens that
+ * day's dialog.
  */
 export default function CalendarGrid({
   view,
@@ -57,14 +59,18 @@ export default function CalendarGrid({
   const weeks = useMemo(() => chunkIntoWeeks(cells), [cells]);
 
   return (
-    <section aria-label="Month calendar" className={`${cardSurface} p-4 sm:p-5`}>
+    <section aria-label="Month calendar">
+      {/* Header row: month/year left, controls right */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-semibold text-ink">
+          {formatMonthYear(view)}
+        </h2>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={onPrevMonth}
             aria-label="Previous month"
-            className={iconButton}
+            className="px-3"
           >
             <svg
               aria-hidden="true"
@@ -78,17 +84,15 @@ export default function CalendarGrid({
             >
               <path d="m15 18-6-6 6-6" />
             </svg>
-          </button>
-
-          <h2 className="min-w-[9.5rem] text-center text-base font-semibold text-zinc-900 dark:text-zinc-50 sm:text-lg">
-            {formatMonthYear(view)}
-          </h2>
-
-          <button
-            type="button"
+          </Button>
+          <Button variant="secondary" onClick={onToday}>
+            Today
+          </Button>
+          <Button
+            variant="secondary"
             onClick={onNextMonth}
             aria-label="Next month"
-            className={iconButton}
+            className="px-3"
           >
             <svg
               aria-hidden="true"
@@ -102,85 +106,109 @@ export default function CalendarGrid({
             >
               <path d="m9 18 6-6-6-6" />
             </svg>
-          </button>
+          </Button>
         </div>
-
-        <button type="button" onClick={onToday} className={secondaryButton}>
-          Today
-        </button>
       </div>
 
-      <table className="w-full table-fixed border-collapse">
-        <thead>
-          <tr>
-            {WEEKDAYS.map((day) => (
-              <th
-                key={day.long}
-                scope="col"
-                className="pb-2 text-center text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 sm:text-xs"
-              >
-                <span aria-hidden="true" className="hidden sm:inline">
-                  {day.long}
-                </span>
-                <span aria-hidden="true" className="sm:hidden">
-                  {day.short}
-                </span>
-                <span className="sr-only">{day.long}</span>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {weeks.map((week) => (
-            <tr key={week[0].key}>
-              {week.map((cell) => {
-                const count = counts.get(cell.key) ?? 0;
-                const isToday = cell.key === today;
-
-                const cellClasses = [
-                  "flex min-h-11 w-full flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 transition sm:min-h-14 lg:min-h-16",
-                  isToday
-                    ? "bg-emerald-50 font-semibold text-emerald-700 ring-2 ring-emerald-500 dark:bg-emerald-950/60 dark:text-emerald-300 dark:ring-emerald-400"
-                    : cell.inMonth
-                      ? "text-zinc-800 hover:bg-zinc-100 dark:text-zinc-100 dark:hover:bg-zinc-800"
-                      : "text-zinc-400 hover:bg-zinc-50 dark:text-zinc-500 dark:hover:bg-zinc-800/60",
-                  focusRing,
-                ].join(" ");
-
-                const labelParts = [formatFullDate(cell.key)];
-                if (isToday) labelParts.push("today");
-                if (count > 0) {
-                  labelParts.push(`${count} item${count === 1 ? "" : "s"}`);
-                }
-
-                return (
-                  <td key={cell.key} className="p-0.5">
-                    <button
-                      type="button"
-                      onClick={() => onSelectDate(cell.key)}
-                      aria-label={labelParts.join(", ")}
-                      className={cellClasses}
-                    >
-                      <span className="text-sm sm:text-base">{cell.day}</span>
-                      {count > 0 && (
-                        <span
-                          className={
-                            isToday
-                              ? "inline-flex min-w-4 items-center justify-center rounded-full bg-white px-1 text-[10px] font-semibold leading-4 text-emerald-700"
-                              : "inline-flex min-w-4 items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-semibold leading-4 text-white"
-                          }
-                        >
-                          {count > 99 ? "99+" : count}
-                        </span>
-                      )}
-                    </button>
-                  </td>
-                );
-              })}
+      <div className="overflow-hidden rounded-md border border-line bg-surface">
+        <table className="w-full table-fixed border-collapse">
+          <thead>
+            <tr>
+              {WEEKDAYS.map((day, index) => (
+                <th
+                  key={day.long}
+                  scope="col"
+                  className={[
+                    "border-b border-line bg-subtle px-1.5 py-2 text-left text-xs font-medium text-ink-muted sm:px-2",
+                    index < 6 ? "border-r border-line" : "",
+                  ].join(" ")}
+                >
+                  <span aria-hidden="true" className="hidden sm:inline">
+                    {day.long}
+                  </span>
+                  <span aria-hidden="true" className="sm:hidden">
+                    {day.short}
+                  </span>
+                  <span className="sr-only">{day.long}</span>
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {weeks.map((week, weekIndex) => (
+              <tr key={week[0].key}>
+                {week.map((cell, cellIndex) => {
+                  const count = counts.get(cell.key) ?? 0;
+                  const isToday = cell.key === today;
+                  const isLastRow = weekIndex === weeks.length - 1;
+
+                  const tdClasses = [
+                    "border-line p-0",
+                    cellIndex < 6 ? "border-r" : "",
+                    isLastRow ? "" : "border-b",
+                  ].join(" ");
+
+                  const buttonClasses = [
+                    "flex min-h-20 w-full flex-col items-start justify-between gap-1 p-1.5 text-left transition-colors duration-150 hover:bg-subtle sm:min-h-28 sm:p-2",
+                    "focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent",
+                  ].join(" ");
+
+                  const labelParts = [formatFullDate(cell.key)];
+                  if (isToday) labelParts.push("today");
+                  if (count > 0) {
+                    labelParts.push(
+                      `${count} item${count === 1 ? "" : "s"}`,
+                    );
+                  }
+
+                  return (
+                    <td key={cell.key} className={tdClasses}>
+                      <button
+                        type="button"
+                        onClick={() => onSelectDate(cell.key)}
+                        aria-label={labelParts.join(", ")}
+                        className={buttonClasses}
+                      >
+                        <span className="relative flex h-7 w-7 items-center justify-center">
+                          {isToday && (
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 rounded-full bg-accent"
+                            />
+                          )}
+                          <span
+                            className={[
+                              "relative text-sm font-medium",
+                              isToday
+                                ? "text-white"
+                                : cell.inMonth
+                                  ? "text-ink"
+                                  : "text-ink-muted",
+                            ].join(" ")}
+                          >
+                            {cell.day}
+                          </span>
+                        </span>
+                        {count > 0 && (
+                          <>
+                            <span
+                              aria-hidden="true"
+                              className="h-1.5 w-1.5 rounded-full bg-accent sm:hidden"
+                            />
+                            <span className="hidden text-xs text-accent sm:inline">
+                              {count} event{count === 1 ? "" : "s"}
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

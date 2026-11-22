@@ -1,52 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" role="img" aria-label="MineMemoSlop banner">
-  <defs>
-    <linearGradient id="bannerGradient" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d9488"/>
-      <stop offset="55%" stop-color="#059669"/>
-      <stop offset="100%" stop-color="#0284c7"/>
-    </linearGradient>
-    <linearGradient id="bannerSheen" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <pattern id="bannerDots" width="32" height="32" patternUnits="userSpaceOnUse">
-      <circle cx="4" cy="4" r="2" fill="#ffffff" fill-opacity="0.16"/>
-    </pattern>
-  </defs>
-
-  <rect width="1600" height="400" fill="url(#bannerGradient)"/>
-  <rect width="1600" height="400" fill="url(#bannerDots)"/>
-
-  <circle cx="1380" cy="70" r="200" fill="#ffffff" fill-opacity="0.12"/>
-  <circle cx="1510" cy="330" r="140" fill="#ffffff" fill-opacity="0.10"/>
-  <circle cx="140" cy="340" r="180" fill="#ffffff" fill-opacity="0.08"/>
-  <circle cx="250" cy="60" r="120" fill="#ffffff" fill-opacity="0.07"/>
-
-  <rect width="1600" height="220" fill="url(#bannerSheen)"/>
-
-  <!-- Stylised calendar card -->
-  <g transform="translate(800 200)">
-    <rect x="-122" y="-142" width="20" height="54" rx="10" fill="#ffffff" fill-opacity="0.9"/>
-    <rect x="102" y="-142" width="20" height="54" rx="10" fill="#ffffff" fill-opacity="0.9"/>
-    <rect x="-170" y="-110" width="340" height="220" rx="28" fill="#ffffff" fill-opacity="0.18" stroke="#ffffff" stroke-opacity="0.55" stroke-width="4"/>
-    <path d="M-170 -82 a28 28 0 0 1 28 -28 h284 a28 28 0 0 1 28 28 v26 h-340 z" fill="#ffffff" fill-opacity="0.32"/>
-
-    <g fill="#ffffff" fill-opacity="0.35">
-      <rect x="-126" y="-48" width="48" height="40" rx="10"/>
-      <rect x="-58" y="-48" width="48" height="40" rx="10"/>
-      <rect x="10" y="-48" width="48" height="40" rx="10"/>
-      <rect x="78" y="-48" width="48" height="40" rx="10"/>
-      <rect x="-126" y="8" width="48" height="40" rx="10"/>
-      <rect x="-58" y="8" width="48" height="40" rx="10"/>
-      <rect x="78" y="8" width="48" height="40" rx="10"/>
-      <rect x="-126" y="64" width="48" height="40" rx="10"/>
-      <rect x="-58" y="64" width="48" height="40" rx="10"/>
-      <rect x="10" y="64" width="48" height="40" rx="10"/>
-      <rect x="78" y="64" width="48" height="40" rx="10"/>
-    </g>
-
-    <!-- Highlighted "today" cell -->
-    <rect x="10" y="8" width="48" height="40" rx="10" fill="#ffffff" fill-opacity="0.95"/>
-    <circle cx="34" cy="44" r="6" fill="#059669"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" fill="none">
+  <rect width="1600" height="400" fill="#F9FAFB"/>
+  <!-- Memo lines (left) -->
+  <path d="M360 140h200M360 180h200M360 220h200M360 260h160" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+  <path d="M360 300h120" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round"/>
+  <!-- Memo lines (right) -->
+  <path d="M1040 140h200M1040 180h200M1040 220h200M1040 260h160" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1040 300h120" stroke="#1D4ED8" stroke-width="4" stroke-linecap="round"/>
+  <!-- Calendar card -->
+  <rect x="700" y="56" width="10" height="36" rx="5" fill="#E5E7EB"/>
+  <rect x="890" y="56" width="10" height="36" rx="5" fill="#E5E7EB"/>
+  <rect x="640" y="76" width="320" height="248" rx="6" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="3"/>
+  <path d="M646 76h308a6 6 0 0 1 6 6v50H640V82a6 6 0 0 1 6-6z" fill="#1D4ED8"/>
+  <!-- Day grid -->
+  <path d="M640 180h320M640 228h320M640 276h320M686 132v192M731 132v192M777 132v192M823 132v192M869 132v192M914 132v192" stroke="#E5E7EB" stroke-width="2"/>
+  <!-- Accent day markers -->
+  <circle cx="708" cy="156" r="7" fill="#1D4ED8"/>
+  <circle cx="800" cy="156" r="7" fill="#1D4ED8"/>
+  <circle cx="846" cy="204" r="7" fill="#1D4ED8"/>
+  <circle cx="754" cy="252" r="7" fill="#1D4ED8"/>
+  <circle cx="891" cy="252" r="7" fill="#1D4ED8"/>
 </svg>

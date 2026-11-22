@@ -2,8 +2,10 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Field from "@/components/ui/Field";
 import { isAuthenticated, signIn } from "@/lib/storage";
-import { focusRing, inputBase, primaryButton } from "@/lib/ui";
+import { focusRing } from "@/lib/ui";
 
 const MAX_LENGTH = 20;
 const CREDENTIAL = "slop";
@@ -12,15 +14,10 @@ type FieldKey = "id" | "password" | "commonPassword";
 type FieldValues = Record<FieldKey, string>;
 type FieldErrors = Partial<Record<FieldKey, string>>;
 
-interface LoginFieldProps {
-  field: FieldKey;
+interface PasswordToggleProps {
   label: string;
-  inputType: "text" | "password";
-  autoComplete: string;
-  value: string;
-  error?: string;
-  toggle?: { revealed: boolean; onToggle: () => void };
-  onChange: (field: FieldKey, value: string) => void;
+  revealed: boolean;
+  onToggle: () => void;
 }
 
 function EyeIcon() {
@@ -61,64 +58,22 @@ function EyeOffIcon() {
   );
 }
 
-function LoginField({
-  field,
+function PasswordToggle({
   label,
-  inputType,
-  autoComplete,
-  value,
-  error,
-  toggle,
-  onChange,
-}: LoginFieldProps) {
-  const inputId = `login-${field}`;
-  const errorId = `${inputId}-error`;
-  const revealed = toggle?.revealed ?? false;
-  const describedBy = error ? errorId : undefined;
-
+  revealed,
+  onToggle,
+}: PasswordToggleProps) {
   return (
-    <div>
-      <label
-        htmlFor={inputId}
-        className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-      >
-        {label}
-      </label>
-      <div className="relative mt-1.5">
-        <input
-          id={inputId}
-          name={field}
-          type={inputType === "password" && revealed ? "text" : inputType}
-          value={value}
-          onChange={(event) => onChange(field, event.target.value)}
-          maxLength={MAX_LENGTH}
-          autoComplete={autoComplete}
-          aria-invalid={error !== undefined}
-          aria-describedby={describedBy}
-          className={`${inputBase} ${inputType === "password" ? "pr-12" : ""}`}
-        />
-        {toggle && (
-          <button
-            type="button"
-            onClick={toggle.onToggle}
-            aria-label={`${revealed ? "Hide" : "Show"} ${label}`}
-            aria-pressed={revealed}
-            className={`absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-xl text-zinc-500 transition hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-100 ${focusRing}`}
-          >
-            {revealed ? <EyeOffIcon /> : <EyeIcon />}
-          </button>
-        )}
-      </div>
-      {error && (
-        <p
-          id={errorId}
-          role="alert"
-          className="mt-1.5 text-xs text-red-600 dark:text-red-400"
-        >
-          {error}
-        </p>
-      )}
-    </div>
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={`${revealed ? "Hide" : "Show"} ${label}`}
+      aria-pressed={revealed}
+      title={`${revealed ? "Hide" : "Show"} ${label}`}
+      className={`flex h-11 w-11 items-center justify-center text-ink-muted transition-colors duration-150 hover:text-ink ${focusRing}`}
+    >
+      {revealed ? <EyeOffIcon /> : <EyeIcon />}
+    </button>
   );
 }
 
@@ -205,78 +160,85 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-emerald-50 via-white to-sky-50 px-4 py-10 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-900">
+    <main className="flex min-h-screen items-center justify-center bg-page px-4 py-10">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
-          <div className="flex flex-col items-center text-center">
+        <div className="rounded-md border border-line bg-surface p-6">
+          <div className="flex items-center gap-3">
             <span
               aria-hidden="true"
-              className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-xl font-bold text-white shadow-md"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent text-base font-semibold text-white"
             >
               M
             </span>
-            <h1 className="mt-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-              Sign in to MineMemoSlop
-            </h1>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              Enter your credentials to continue.
-            </p>
+            <h1 className="text-2xl font-semibold text-ink">MineMemoSlop</h1>
           </div>
+          <p className="mt-2 text-sm text-ink-muted">
+            Enter your credentials to continue.
+          </p>
 
-          <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+          <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-5">
             {formError && (
               <p
                 role="alert"
-                className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300"
+                className="rounded-md border border-danger-border bg-danger-bg px-3.5 py-3 text-sm text-danger"
               >
                 {formError}
               </p>
             )}
 
-            <LoginField
-              field="id"
+            <Field
+              id="login-id"
               label="ID"
-              inputType="text"
+              type="text"
               autoComplete="username"
               value={values.id}
+              onChange={(value) => handleFieldChange("id", value)}
               error={errors.id}
-              onChange={handleFieldChange}
+              maxLength={MAX_LENGTH}
             />
 
-            <LoginField
-              field="password"
+            <Field
+              id="login-password"
               label="Password"
-              inputType="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               value={values.password}
+              onChange={(value) => handleFieldChange("password", value)}
               error={errors.password}
-              toggle={{
-                revealed: showPassword,
-                onToggle: () => setShowPassword((current) => !current),
-              }}
-              onChange={handleFieldChange}
+              maxLength={MAX_LENGTH}
+              endAdornment={
+                <PasswordToggle
+                  label="Password"
+                  revealed={showPassword}
+                  onToggle={() => setShowPassword((current) => !current)}
+                />
+              }
             />
 
-            <LoginField
-              field="commonPassword"
+            <Field
+              id="login-commonPassword"
               label="Common Password"
-              inputType="password"
+              type={showCommon ? "text" : "password"}
               autoComplete="current-password"
               value={values.commonPassword}
+              onChange={(value) => handleFieldChange("commonPassword", value)}
               error={errors.commonPassword}
-              toggle={{
-                revealed: showCommon,
-                onToggle: () => setShowCommon((current) => !current),
-              }}
-              onChange={handleFieldChange}
+              maxLength={MAX_LENGTH}
+              endAdornment={
+                <PasswordToggle
+                  label="Common Password"
+                  revealed={showCommon}
+                  onToggle={() => setShowCommon((current) => !current)}
+                />
+              }
             />
 
-            <button type="submit" className={`${primaryButton} w-full`}>
+            <Button type="submit" className="w-full">
               Sign in
-            </button>
+            </Button>
           </form>
 
-          <p className="mt-5 text-center text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-5 text-center text-sm text-ink-muted">
             Demo access: all three fields must be slop.
           </p>
         </div>

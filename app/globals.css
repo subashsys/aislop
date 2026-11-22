@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * MineMemoSlop design system.
+ * Neutral grays + one navy/blue accent. Components must use these tokens
+ * (bg-surface, text-ink, border-line, ...) instead of raw color values.
+ */
+@theme {
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Surfaces */
+  --color-page: #ffffff;
+  --color-surface: #ffffff;
+  --color-subtle: #f9fafb;
+  --color-line: #e5e7eb;
+  --color-line-strong: #d1d5db;
+  --color-tag: #f3f4f6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Text */
+  --color-ink: #111827;
+  --color-ink-secondary: #4b5563;
+  --color-ink-muted: #6b7280;
+
+  /* Accent (the only color) */
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e40af;
+  --color-accent-soft: #eff6ff;
+
+  /* Danger */
+  --color-danger: #b91c1c;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+
+  /* Success */
+  --color-success: #166534;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background-color: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 }

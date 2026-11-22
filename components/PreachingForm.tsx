@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Button from "@/components/ui/Button";
+import Field from "@/components/ui/Field";
 import {
   createId,
   PREACHING_TYPES,
@@ -8,7 +10,6 @@ import {
   type PreachingRecord,
   type PreachingType,
 } from "@/lib/storage";
-import { inputBase, primaryButton } from "@/lib/ui";
 
 const MAX_NAME_LENGTH = 60;
 const MAX_WAY_LENGTH = 500;
@@ -43,12 +44,6 @@ export default function PreachingForm({ onSave }: PreachingFormProps) {
   const date = chosenDate ?? today;
 
   const wayLength = preachingWay.length;
-  const counterClass =
-    wayLength >= MAX_WAY_LENGTH
-      ? "text-red-600 dark:text-red-400"
-      : wayLength >= MAX_WAY_LENGTH - 50
-        ? "text-amber-600 dark:text-amber-400"
-        : "text-zinc-500 dark:text-zinc-400";
 
   const clearError = (field: keyof FieldErrors): void => {
     setErrors((current) => ({ ...current, [field]: undefined }));
@@ -101,68 +96,43 @@ export default function PreachingForm({ onSave }: PreachingFormProps) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-          Preaching details
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          All fields are required.
-        </p>
+        <h2 className="text-lg font-semibold text-ink">Preaching details</h2>
+        <p className="mt-1 text-sm text-ink-muted">All fields are required.</p>
       </div>
 
       {savedMessage && (
         <p
           role="status"
-          className="rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-3 text-sm font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300"
+          className="rounded-md border border-success-border bg-success-bg px-3.5 py-3 text-sm text-success"
         >
           {savedMessage}
         </p>
       )}
 
       {/* 1. Date */}
-      <div>
-        <label
-          htmlFor="preaching-date"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-        >
-          Date
-        </label>
-        <input
-          id="preaching-date"
-          name="date"
-          type="date"
-          required
-          value={date}
-          onChange={(event) => {
-            setChosenDate(event.target.value);
-            clearError("date");
-            setSavedMessage(null);
-          }}
-          aria-invalid={Boolean(errors.date)}
-          aria-describedby={errors.date ? "preaching-date-error" : undefined}
-          className={`mt-1.5 ${inputBase}`}
-        />
-        {errors.date && (
-          <p
-            id="preaching-date-error"
-            role="alert"
-            className="mt-1.5 text-xs text-red-600 dark:text-red-400"
-          >
-            {errors.date}
-          </p>
-        )}
-      </div>
+      <Field
+        id="preaching-date"
+        label="Date"
+        type="date"
+        value={date}
+        onChange={(value) => {
+          setChosenDate(value);
+          clearError("date");
+          setSavedMessage(null);
+        }}
+        error={errors.date}
+        required
+      />
 
       {/* 2. Type */}
       <fieldset>
-        <legend className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Type
-        </legend>
-        <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <legend className="text-sm font-medium text-ink">Type</legend>
+        <div className="mt-1.5 grid grid-cols-2 gap-3">
           {PREACHING_TYPES.map((option) => {
             const selected = type === option;
             const optionClasses = selected
-              ? "border-emerald-600 bg-emerald-50 text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/60 dark:text-emerald-300"
-              : "border-zinc-300 bg-white text-zinc-700 hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-emerald-700";
+              ? "border-accent bg-accent-soft text-accent"
+              : "border-line-strong bg-surface text-ink hover:bg-subtle";
 
             return (
               <label key={option} className="relative cursor-pointer">
@@ -182,7 +152,7 @@ export default function PreachingForm({ onSave }: PreachingFormProps) {
                   }
                 />
                 <span
-                  className={`flex min-h-12 items-center justify-center rounded-xl border px-4 py-3 text-center text-sm font-medium transition peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-emerald-600 ${optionClasses}`}
+                  className={`flex min-h-11 items-center justify-center rounded-md border px-3 py-2.5 text-center text-sm font-medium transition-colors duration-150 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent ${optionClasses}`}
                 >
                   {option}
                 </span>
@@ -194,7 +164,7 @@ export default function PreachingForm({ onSave }: PreachingFormProps) {
           <p
             id="preaching-type-error"
             role="alert"
-            className="mt-1.5 text-xs text-red-600 dark:text-red-400"
+            className="mt-1.5 text-sm text-danger"
           >
             {errors.type}
           </p>
@@ -202,104 +172,52 @@ export default function PreachingForm({ onSave }: PreachingFormProps) {
       </fieldset>
 
       {/* 3. Person name */}
-      <div>
-        <label
-          htmlFor="preaching-person"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-        >
-          Person Name
-        </label>
-        <input
-          id="preaching-person"
-          name="personName"
-          type="text"
-          required
-          maxLength={MAX_NAME_LENGTH}
-          value={personName}
-          onChange={(event) => {
-            setPersonName(event.target.value);
-            clearError("personName");
-            setSavedMessage(null);
-          }}
-          placeholder="e.g. John Smith"
-          aria-invalid={Boolean(errors.personName)}
-          aria-describedby={
-            errors.personName ? "preaching-person-error" : undefined
-          }
-          className={`mt-1.5 ${inputBase}`}
-        />
-        {errors.personName && (
-          <p
-            id="preaching-person-error"
-            role="alert"
-            className="mt-1.5 text-xs text-red-600 dark:text-red-400"
-          >
-            {errors.personName}
-          </p>
-        )}
-      </div>
+      <Field
+        id="preaching-person"
+        label="Person Name"
+        value={personName}
+        onChange={(value) => {
+          setPersonName(value);
+          clearError("personName");
+          setSavedMessage(null);
+        }}
+        error={errors.personName}
+        placeholder="e.g. John Smith"
+        maxLength={MAX_NAME_LENGTH}
+        required
+      />
 
       {/* 4. Preaching way */}
-      <div>
-        <label
-          htmlFor="preaching-way"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-        >
-          Preaching Way
-        </label>
-        <textarea
-          id="preaching-way"
-          name="preachingWay"
-          required
-          rows={5}
-          maxLength={MAX_WAY_LENGTH}
-          value={preachingWay}
-          onChange={(event) => {
-            const value = event.target.value;
-            if (value.length > MAX_WAY_LENGTH) {
-              setErrors((current) => ({
-                ...current,
-                preachingWay: `Preaching way must be ${MAX_WAY_LENGTH} characters or fewer.`,
-              }));
-              return;
-            }
-            setPreachingWay(value);
-            clearError("preachingWay");
-            setSavedMessage(null);
-          }}
-          placeholder="How did the conversation go?"
-          aria-invalid={Boolean(errors.preachingWay)}
-          aria-describedby={
-            errors.preachingWay
-              ? "preaching-way-error"
-              : "preaching-way-counter"
+      <Field
+        id="preaching-way"
+        label="Preaching Way"
+        value={preachingWay}
+        onChange={(value) => {
+          if (value.length > MAX_WAY_LENGTH) {
+            setErrors((current) => ({
+              ...current,
+              preachingWay: `Preaching way must be ${MAX_WAY_LENGTH} characters or fewer.`,
+            }));
+            return;
           }
-          className={`mt-1.5 resize-y ${inputBase}`}
-        />
-        <div className="mt-1 flex items-start justify-between gap-3">
-          {errors.preachingWay ? (
-            <p
-              id="preaching-way-error"
-              role="alert"
-              className="text-xs text-red-600 dark:text-red-400"
-            >
-              {errors.preachingWay}
-            </p>
-          ) : (
-            <span aria-hidden="true" />
-          )}
-          <span
-            id="preaching-way-counter"
-            className={`shrink-0 text-xs tabular-nums ${counterClass}`}
-          >
-            {wayLength}/{MAX_WAY_LENGTH}
-          </span>
-        </div>
-      </div>
+          setPreachingWay(value);
+          clearError("preachingWay");
+          setSavedMessage(null);
+        }}
+        error={errors.preachingWay}
+        placeholder="How did the conversation go?"
+        maxLength={MAX_WAY_LENGTH}
+        required
+        textarea
+        rows={5}
+        counter={`${wayLength}/${MAX_WAY_LENGTH}`}
+      />
 
-      <button type="submit" className={`${primaryButton} w-full`}>
-        Save
-      </button>
+      <div className="flex justify-end">
+        <Button type="submit" className="w-full sm:w-auto">
+          Save
+        </Button>
+      </div>
     </form>
   );
 }

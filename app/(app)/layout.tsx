@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <AuthGuard>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col bg-page">
         <Navbar />
         <main className="flex-1">{children}</main>
       </div>

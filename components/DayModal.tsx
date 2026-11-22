@@ -1,16 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Button from "@/components/ui/Button";
+import Field from "@/components/ui/Field";
 import { formatFullDate } from "@/lib/date";
 import type { CalendarEvent, PreachingRecord } from "@/lib/storage";
-import {
-  cardSurface,
-  dangerButton,
-  focusRing,
-  inputBase,
-  primaryButton,
-  secondaryButton,
-} from "@/lib/ui";
+import { focusRing } from "@/lib/ui";
 
 const MAX_TITLE_LENGTH = 100;
 
@@ -91,7 +86,7 @@ export default function DayModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-zinc-950/50 p-4 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -102,25 +97,21 @@ export default function DayModal({
         aria-modal="true"
         aria-labelledby="day-dialog-title"
         tabIndex={-1}
-        className={`max-h-[85vh] w-full max-w-lg overflow-y-auto p-5 outline-none sm:p-6 ${cardSurface}`}
+        className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-lg border border-line bg-surface p-6 shadow-lg outline-none"
       >
         <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
-              Day details
-            </p>
-            <h2
-              id="day-dialog-title"
-              className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-50 sm:text-xl"
-            >
-              {formatFullDate(dateKey)}
-            </h2>
-          </div>
+          <h2
+            id="day-dialog-title"
+            className="min-w-0 break-words text-lg font-semibold text-ink"
+          >
+            {formatFullDate(dateKey)}
+          </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 ${focusRing}`}
+            title="Close"
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors duration-150 hover:bg-subtle hover:text-ink ${focusRing}`}
           >
             <svg
               aria-hidden="true"
@@ -136,76 +127,76 @@ export default function DayModal({
           </button>
         </div>
 
-        <section className="mt-5" aria-labelledby="day-events-heading">
+        <section className="mt-6" aria-labelledby="day-events-heading">
           <h3
             id="day-events-heading"
-            className="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+            className="text-base font-semibold text-ink"
           >
             Events
           </h3>
           {events.length === 0 ? (
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-2 text-sm text-ink-muted">
               No events on this day yet.
             </p>
           ) : (
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 divide-y divide-line">
               {events.map((item) => (
                 <li
                   key={item.id}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800/60"
+                  className="flex items-center justify-between gap-3 py-3"
                 >
-                  <span className="min-w-0 break-words text-sm text-zinc-800 dark:text-zinc-100">
+                  <span className="min-w-0 break-words text-sm text-ink">
                     {item.title}
                   </span>
-                  <button
-                    type="button"
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => onDeleteEvent(item.id)}
-                    className={dangerButton}
                   >
                     Delete
-                  </button>
+                  </Button>
                 </li>
               ))}
             </ul>
           )}
         </section>
 
-        <section className="mt-5" aria-labelledby="day-records-heading">
+        <section className="mt-6" aria-labelledby="day-records-heading">
           <h3
             id="day-records-heading"
-            className="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+            className="text-base font-semibold text-ink"
           >
             Preaching records
           </h3>
           {records.length === 0 ? (
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-2 text-sm text-ink-muted">
               No preaching records on this day.
             </p>
           ) : (
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 divide-y divide-line">
               {records.map((record) => (
                 <li
                   key={record.id}
-                  className="flex items-start justify-between gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 dark:border-zinc-700 dark:bg-zinc-800/60"
+                  className="flex items-start justify-between gap-3 py-3"
                 >
-                  <div className="min-w-0">
-                    <span className="inline-flex rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                  <div className="min-w-0 flex-1">
+                    <span className="inline-flex rounded bg-tag px-2 py-0.5 text-xs font-medium text-ink-secondary">
                       {record.type}
                     </span>
-                    <p className="mt-1 break-words text-sm font-medium text-zinc-900 dark:text-zinc-50">
+                    <p className="mt-1.5 break-words text-sm font-medium text-ink">
                       {record.personName}
                     </p>
-                    <p className="mt-0.5 line-clamp-2 break-words text-xs text-zinc-500 dark:text-zinc-400">
+                    <p className="mt-0.5 break-words text-sm text-ink-secondary">
                       {record.preachingWay}
                     </p>
                   </div>
-                  <button
-                    type="button"
+                  <Button
+                    variant="danger"
+                    size="sm"
                     onClick={() => onDeleteRecord(record.id)}
-                    className={dangerButton}
                   >
                     Delete
-                  </button>
+                  </Button>
                 </li>
               ))}
             </ul>
@@ -213,45 +204,26 @@ export default function DayModal({
         </section>
 
         <form onSubmit={handleSubmit} noValidate className="mt-6">
-          <label
-            htmlFor="day-event-title"
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
-            New event
-          </label>
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-            <input
-              id="day-event-title"
-              name="title"
-              type="text"
-              required
-              maxLength={MAX_TITLE_LENGTH}
-              value={title}
-              onChange={(event) => handleTitleChange(event.target.value)}
-              placeholder="e.g. Evening service"
-              aria-invalid={error !== null}
-              aria-describedby={error ? "day-event-title-error" : undefined}
-              className={inputBase}
-            />
-            <button type="submit" className={`${primaryButton} shrink-0`}>
-              Add
-            </button>
-          </div>
-          {error && (
-            <p
-              id="day-event-title-error"
-              role="alert"
-              className="mt-2 text-xs text-red-600 dark:text-red-400"
-            >
-              {error}
-            </p>
-          )}
+          <Field
+            id="day-event-title"
+            label="New event"
+            value={title}
+            onChange={handleTitleChange}
+            error={error ?? undefined}
+            maxLength={MAX_TITLE_LENGTH}
+            placeholder="e.g. Evening service"
+            action={
+              <Button type="submit" className="shrink-0">
+                Add
+              </Button>
+            }
+          />
         </form>
 
         <div className="mt-6 flex justify-end">
-          <button type="button" onClick={onClose} className={secondaryButton}>
+          <Button variant="secondary" onClick={onClose}>
             Close
-          </button>
+          </Button>
         </div>
       </div>
     </div>

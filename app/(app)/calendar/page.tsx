@@ -12,7 +12,7 @@ import {
   usePreachingRecords,
   useTodayKey,
 } from "@/lib/storage";
-import { cardSurface } from "@/lib/ui";
+import { pageLead, pageShell, pageTitle, pageVertical } from "@/lib/ui";
 
 /**
  * Month grid + per-day dialog. Events and preaching records come straight
@@ -44,9 +44,9 @@ export default function CalendarPage() {
   // placeholder until the client store reports today's key.
   if (todayView === null) {
     return (
-      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6">
+      <div className={`${pageShell} ${pageVertical} max-w-4xl bg-page`}>
         <div
-          className={`h-96 w-full animate-pulse ${cardSurface}`}
+          className="h-96 w-full rounded-md border border-line bg-surface"
           aria-hidden="true"
         />
         <p className="sr-only" role="status">
@@ -104,12 +104,10 @@ export default function CalendarPage() {
       : records.filter((record) => record.date === selectedDate);
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
-      <header className="mb-5">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Calendar
-        </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+    <div className={`${pageShell} ${pageVertical} max-w-4xl bg-page`}>
+      <header className="mb-6">
+        <h1 className={pageTitle}>Calendar</h1>
+        <p className={pageLead}>
           Select a date to view, add or delete items for that day.
         </p>
       </header>
