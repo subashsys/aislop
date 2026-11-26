@@ -42,3 +42,11 @@ body {
   color: var(--color-ink);
   font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+
+/* Message ticker: swap messages instantly (no slide) when the visitor
+ * prefers reduced motion. Unlayered, so it wins over the utility layer. */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    transition: none;
+  }
+}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import MessageTicker from "@/components/MessageTicker";
 import { focusRing, pageShell, pageVertical } from "@/lib/ui";
 
 const actionCard = [
@@ -75,6 +76,8 @@ export default function HomePage() {
           </span>
         </Link>
       </div>
+
+      <MessageTicker />
     </div>
   );
 }
