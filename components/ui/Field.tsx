@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { InputHTMLAttributes, ReactNode } from "react";
 
 interface FieldProps {
   id: string;
@@ -7,7 +7,9 @@ interface FieldProps {
   onChange: (value: string) => void;
   /** Inline validation message shown below the control in red. */
   error?: string;
-  type?: "text" | "password" | "date";
+  type?: "text" | "password" | "date" | "tel";
+  inputMode?: InputHTMLAttributes<HTMLInputElement>["inputMode"];
+  autoFocus?: boolean;
   placeholder?: string;
   autoComplete?: string;
   maxLength?: number;
@@ -34,6 +36,8 @@ export default function Field({
   onChange,
   error,
   type = "text",
+  inputMode,
+  autoFocus,
   placeholder,
   autoComplete,
   maxLength,
@@ -92,6 +96,8 @@ export default function Field({
               onChange={(event) => onChange(event.target.value)}
               placeholder={placeholder}
               autoComplete={autoComplete}
+              inputMode={inputMode}
+              autoFocus={autoFocus}
               maxLength={maxLength}
               required={required}
               aria-invalid={Boolean(error)}
